@@ -7,10 +7,11 @@ import ru.yandex.qatools.allure.annotations.Description;
 import java.io.*;
 import java.sql.*;
 import java.util.Arrays;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class OpenDate_Test {
+public class OpenData_Test {
     private static Props prop = Props.getProps();
     private boolean status_tsk = false;
     private int Hash_Code_DB;
@@ -152,5 +153,17 @@ public class OpenDate_Test {
             System.out.println("Данные в БД соответствуют данным в файле .CSV");
         } else {System.out.println(Hash_Code_DB + "\n" + hash_Code_CSV);
             throw new Exception("Hash-коды не равны.  Hash_DB = " + Hash_Code_DB + "\n" + "Hash_CSV = " + hash_Code_CSV);}
+
+             /** Description("Убиваем процесс OpenDataService.exe") */
+
+            Scanner sc = new Scanner(Runtime.getRuntime().exec("tasklist").getInputStream());
+            StringBuffer sb = new StringBuffer();
+            while (sc.hasNext()){
+                sb.append(sc.nextLine());
+            }
+            if (sb.toString().indexOf("OpenDataService.exe") != -1){
+                Runtime.getRuntime().exec("taskkill /f /im OpenDataService.exe");
+            }
+            Thread.sleep(500);
     }
 }
